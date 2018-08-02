@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function () {
+            $.get("/prov",function (data) {
+{#                获取json返回的数据#}
+                res=data.data
+{#                获取下拉框的数据#}
+                prov=$("#prov")
+
+                $.each(res,function (index,items) {
+                    id=items[0]
+                    atitle=items[1]
+
+                    str="<option value="+id+">"+atitle+"</option>"
+                    prov.append(str)
+                })
+            })
+
+            $("#prov").change(function () {
+                prov_id=$(this).val()
+                $.get("/city"+prov_id,function (data) {
+                    res=data.data
+                    city=$("#city")
+                    city.empty().append("<option>---请选择市----</option>")
+                    dis=$("#dis")
+                    dis.empty().append("<option>---请选择区----</option>")
+{#                    $.each(res,function (index, items) {#}
+{#                        id=items[0]#}
+{#                        atitle=items[1]#}
+{#                        str="<option value="+id+">"+atitle+"</option>"#}
+{#                        city.append(str)#}
+{#                    })#}
+
+
+                    for (i=0;i<=res.length;i++){
+                        id=res[i][0]
+                        atitle=res[i][1]
+                        str="<option value="+id+">"+atitle+"</option>"
+                        city.append(str)
+                    }
+
+
+
+                })
+            })
+
+            $("#city").change(function () {
+                dis_id=$(this).val()
+                $.get("/dis"+dis_id,function (data) {
+                    console.log(data)
+                    console.log(data.data)
+                    res=data.data
+                    dis=$("#dis")
+                    dis.empty().append("<option>---请选择区----</option>")
+                    $.each(res,function (index,items)  {
+                        id=items[0]
+                        atitle=items[1]
+                        str="<option value="+id+">"+atitle+"</option>"
+                        dis.append(str)
+                    })
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+
+    <select id="prov">
+        <option>---请选择省----</option>
+    </select>
+    <select id="city">
+        <option>---请选择市----</option>
+    </select>
+    <select id="dis">
+        <option>---请选择区----</option>
+    </select>
+
+</body>
+</html>
